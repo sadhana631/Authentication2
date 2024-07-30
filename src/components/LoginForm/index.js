@@ -1,11 +1,8 @@
 import {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import Cookies from 'js-cookie'
-
 import Home from '../Home'
-
 import './index.css'
-
 class LoginForm extends Component {
   state = {
     username: '',
@@ -24,11 +21,10 @@ class LoginForm extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-
     Cookies.set('jwt_token', jwtToken, {
       expires: 30,
     })
-    return <Home />
+    history.replace('/')
   }
 
   onSubmitFailure = errorMsg => {
@@ -47,6 +43,7 @@ class LoginForm extends Component {
     const response = await fetch(url, options)
     const data = await response.json()
 
+
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
     } else {
@@ -56,7 +53,6 @@ class LoginForm extends Component {
 
   renderPasswordField = () => {
     const {password} = this.state
-
     return (
       <>
         <label className="input-label" htmlFor="password">
@@ -76,7 +72,6 @@ class LoginForm extends Component {
 
   renderUsernameField = () => {
     const {username} = this.state
-
     return (
       <>
         <label className="input-label" htmlFor="username">
@@ -97,11 +92,9 @@ class LoginForm extends Component {
   render() {
     const {showSubmitError, errorMsg} = this.state
     const jwtToken = Cookies.get('jwt_token')
-
     if (jwtToken !== undefined) {
       return <Redirect to="/" />
     }
-
     return (
       <div className="login-form-container">
         <img
@@ -122,7 +115,7 @@ class LoginForm extends Component {
           />
           <div className="input-container">{this.renderUsernameField()}</div>
           <div className="input-container">{this.renderPasswordField()}</div>
-          <button type="button" className="login-button">
+          <button type="submit" className="login-button">
             Login
           </button>
           {showSubmitError && <p className="error-message">*{errorMsg}</p>}

@@ -7,7 +7,7 @@ import './index.css'
 
 const Home = () => {
   const accessToken = Cookies.get('jwt_token')
- 
+
   if (accessToken === undefined) {
     return <Redirect to="/login" />
   }
